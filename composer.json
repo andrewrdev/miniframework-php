@@ -1,0 +1,13 @@
+{
+    "authors": [
+        {
+            "name": "Andrew Rodrigues"
+        }
+    ],
+    
+    "autoload": {
+        "psr-4": {
+            "src\\": "src/"
+        }
+    }
+}
