@@ -29,6 +29,3 @@ require_once __DIR__ . '/../src/config/config.php';
 */
 
 $route = new Route();
-
-$db = new Database();
-$db->connect();
