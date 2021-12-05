@@ -1,5 +1,7 @@
 <?php 
 
+session_start();
+
 define('ROOT_URL', 'http://localhost/miniframework/public');
 
 /*
@@ -9,6 +11,6 @@ define('ROOT_URL', 'http://localhost/miniframework/public');
 */
 
 define('DB_HOST', 'localhost');
-define('DB_NAME', '');
-define('DB_USER', '');
+define('DB_NAME', 'phpstore');
+define('DB_USER', 'root');
 define('DB_PASS', '');

@@ -1,5 +1,9 @@
 <?php
 
+use src\classes\Database;
+
+
+
 use src\routes\Route;
 
 /*
@@ -25,3 +29,6 @@ require_once __DIR__ . '/../src/config/config.php';
 */
 
 $route = new Route();
+
+$db = new Database();
+$db->connect();
