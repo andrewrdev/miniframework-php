@@ -1,9 +1,5 @@
 <?php
 
-use src\classes\Database;
-
-
-
 use src\routes\Route;
 
 /*
