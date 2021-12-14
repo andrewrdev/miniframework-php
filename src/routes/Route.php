@@ -2,7 +2,7 @@
 
 namespace src\routes;
 
-class Route
+class Route extends Web
 {
     /*
     |------------------------------------------------------------------------------------------------------------------
@@ -17,40 +17,13 @@ class Route
 
     /*
     |------------------------------------------------------------------------------------------------------------------
-    | Routes
-    |------------------------------------------------------------------------------------------------------------------
-    */
-
-    public function routes()
-    {
-        $routes['index'] = array(
-            'route' => '/',
-            'controller' => 'IndexController',
-            'action' => 'index'
-        );
-
-        $routes['sobre'] = array(
-            'route' => '/sobre',
-            'controller' => 'IndexController',
-            'action' => 'sobre'
-        );
-
-        return $routes;
-    }
-
-    /*
-    |------------------------------------------------------------------------------------------------------------------
     | Get URL
     |------------------------------------------------------------------------------------------------------------------
     */
 
     public function getUrl()
     {
-        if (!isset($_GET['url'])) {
-            $_GET['url'] = '/';
-        }
-
-        return parse_url(strtolower($_GET['url']), PHP_URL_PATH);
+        return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     }
 
     /*

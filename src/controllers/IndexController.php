@@ -2,10 +2,11 @@
 
 namespace src\controllers;
 
-use src\classes\View;
+use src\classes\Render;
 
 class IndexController
 {
+
     /*
     |------------------------------------------------------------------------------------------------------------------
     | Index
@@ -14,10 +15,11 @@ class IndexController
 
     public function index()
     {
-        View::render([
-            'templates/head',
-            'IndexView',
-            'templates/footer',
+
+        Render::view([
+            'template/head',
+            'inicio',
+            'template/footer'
         ]);
     }
 
@@ -29,10 +31,10 @@ class IndexController
 
     public function sobre()
     {
-        View::render([
-            'templates/head',
-            'SobreView',
-            'templates/footer',
+        Render::view([
+            'template/head',
+            'sobre',
+            'template/footer'
         ]);
     }
 }
