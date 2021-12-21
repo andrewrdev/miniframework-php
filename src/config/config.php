@@ -18,10 +18,13 @@ session_start();
 define('DB_HOST', 'localhost');
 
 // DB_NAME
-define('DB_NAME', 'php');
+define('DB_NAME', 'test');
 
 // DB_USER
 define('DB_USER', 'root');
 
 // DB_PASSWORD
 define('DB_PASSWORD', '');
+
+// DB_CHARSET
+define('DB_CHARSET', 'utf8');
