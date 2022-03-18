@@ -4,4 +4,5 @@ namespace src\models;
 
 class IndexModel
 {
+	
 }

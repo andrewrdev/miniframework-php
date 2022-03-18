@@ -7,165 +7,105 @@ use PDOException;
 
 class Database
 {
+    private $connection;
 
-    private $conn;
-
-    /*
-    |------------------------------------------------------------------------------------------------------------------
-    | Connect
-    |------------------------------------------------------------------------------------------------------------------
-    */
-
-    public function connect()
+    // -----------------------------------------------------------------------------------------------------------------
+    
+    // -----------------------------------------------------------------------------------------------------------------
+    private function connect()
     {
-        try {
-            $this->conn = new PDO(
-
-                "mysql:" .
-                "host=" . DB_HOST . ";" .
-                "dbname=" . DB_NAME . ";" .
-                "charset=" . DB_CHARSET,
+        try 
+        {
+            $this->connection = new PDO
+            (
+                'mysql:host=' . DB_HOST . ';' .
+                'dbname=' . DB_NAME . ';' .
+                'charset=' . DB_CHARSET,
                 DB_USER,
-                DB_PASSWORD,
-                array(PDO::ATTR_PERSISTENT => true)
-
+                DB_PASSWORD
             );
 
-            // Debug
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->connection->setAttribute(PDO::ATTR_PERSISTENT, true);
+
         } catch (PDOException $e) {
-            echo 'Connection Error';
+            if (DEBUG_MODE) 
+            {
+                echo 'Database Connection Error: ' . $e->getMessage();
+            }
         }
     }
+    // -----------------------------------------------------------------------------------------------------------------
 
-    /*
-    |------------------------------------------------------------------------------------------------------------------
-    | Close Connection
-    |------------------------------------------------------------------------------------------------------------------
-    */
-
-    public function closeConnection()
+    // -----------------------------------------------------------------------------------------------------------------
+    public function select($query, $params = null)
     {
-        $this->conn = null;
-    }
+        try 
+        {
+            $this->connect();
 
-    /*
-    |------------------------------------------------------------------------------------------------------------------
-    | SELECT
-    |------------------------------------------------------------------------------------------------------------------
-    */
+            $conn = $this->connection;
+            $results = null;
 
-    public function select($sql, $params = null)
-    {
+            $stmt = $conn->prepare($query);
 
-        $this->connect();
-
-        $results = null;
-
-        try {
-
-            if (!empty($params)) {
-
-                $stmt = $this->conn->prepare($sql);
-                $stmt->execute($params);
-                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } else {
-
-                $stmt = $this->conn->prepare($sql);
+            if (!isset($params) && empty($params))
+            {
                 $stmt->execute();
+            } else
+            {
+                $stmt->execute($params);
+            }
+
+            if ($stmt->rowCount() > 0)
+            {
                 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
-        } catch (PDOException $e) {
 
-            return false;
-        }
+            $this->connection = null;
 
-        $this->closeConnection();
+            return $results;
 
-        return $results;
-    }
-
-    /*
-    |------------------------------------------------------------------------------------------------------------------
-    | INSERT
-    |------------------------------------------------------------------------------------------------------------------
-    */
-
-    public function insert($sql, $params = null)
-    {
-
-        $this->connect();
-
-        try {
-
-            if (!empty($params)) {
-                $stmt = $this->conn->prepare($sql);
-                $stmt->execute($params);
-            } else {
-                $stmt = $this->conn->prepare($sql);
-                $stmt->execute();
+        } catch (PDOException $e) 
+        {
+            if (DEBUG_MODE)
+            {
+                echo 'ERROR ON SELECT DATA: ' . $e->getMessage();
             }
-        } catch (PDOException $e) {
-
-            return false;
         }
-
-        $this->closeConnection();
     }
+    // -----------------------------------------------------------------------------------------------------------------
 
-    /*
-    |------------------------------------------------------------------------------------------------------------------
-    | UPDATE
-    |------------------------------------------------------------------------------------------------------------------
-    */
-
-    public function update($sql, $params = null)
+    // -----------------------------------------------------------------------------------------------------------------
+    public function execute($query, $params = null)
     {
+        try 
+        {
+            $this->connect();
 
-        $this->connect();
+            $conn = $this->connection;
 
-        try {
+            $stmt = $conn->prepare($query);
 
-            if (!empty($params)) {
-                $stmt = $this->conn->prepare($sql);
-                $stmt->execute($params);
-            } else {
-                $stmt = $this->conn->prepare($sql);
+            if (!isset($params) && empty($params))
+            {
                 $stmt->execute();
-            }
-        } catch (PDOException $e) {
-
-            return false;
-        }
-
-        $this->closeConnection();
-    }
-
-    /*
-    |------------------------------------------------------------------------------------------------------------------
-    | DELETE
-    |------------------------------------------------------------------------------------------------------------------
-    */
-
-    public function delete($sql, $params = null)
-    {
-
-        $this->connect();
-
-        try {
-
-            if (!empty($params)) {
-                $stmt = $this->conn->prepare($sql);
+            } else
+            {
                 $stmt->execute($params);
-            } else {
-                $stmt = $this->conn->prepare($sql);
-                $stmt->execute();
             }
-        } catch (PDOException $e) {
 
-            return false;
+            $this->connection = null;
+
+        } catch (PDOException $e) 
+        {
+            if (DEBUG_MODE)
+            {
+                echo 'ERROR ON EXECUTE QUERY: ' . $e->getMessage();
+            }
         }
-
-        $this->closeConnection();
     }
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
 }
